@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Range;
 
 public record UserCreateRequest(@NotBlank @JsonProperty("name") String name,
                                 @Email @NotBlank @JsonProperty("email_id") String emailId,
-                                @NotNull @Range(min = 1000000000, max = 1999999999) @JsonProperty("phone_number") Long phoneNumber,
+                                @NotNull @Size(min = 10,max = 10)  @JsonProperty("phone_number") String phoneNumber,
                                 @NotBlank @JsonProperty("address") String address,
                                 @NotBlank @JsonProperty("city") String city,
                                 @NotBlank @JsonProperty("country") String country,

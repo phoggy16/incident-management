@@ -32,19 +32,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void registerUser(UserCreateRequest userCreateRequest) {
+
+        long phoneNumber;
+
+        try{
+            phoneNumber = Long.parseLong(userCreateRequest.phoneNumber());
+        }catch (NumberFormatException numberFormatException){
+            throw new CustomException(HttpStatus.BAD_REQUEST, "Only numbers are allowed in phone number");
+        }
+
         Optional<User> userOptional =  userRepository.findByEmailId(userCreateRequest.emailId().trim());
         if(userOptional.isPresent()){
             throw new CustomException(HttpStatus.BAD_REQUEST,"user already exists");
         }
+
         User user = new User(
                 userCreateRequest.name(),
-                userCreateRequest.emailId(),
-                userCreateRequest.phoneNumber(),
+                userCreateRequest.emailId().trim(),
+                phoneNumber,
                 userCreateRequest.address(),
                 userCreateRequest.city(),
                 userCreateRequest.country(),
                 userCreateRequest.pinCode(),
-                bCryptPasswordEncoder.encode(userCreateRequest.password())
+                bCryptPasswordEncoder.encode(userCreateRequest.password().trim())
         );
 
         userRepository.save(user);
