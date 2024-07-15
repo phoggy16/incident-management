@@ -41,6 +41,7 @@ public class IncidentServiceImpl implements IncidentService{
     public void createIncident(IncidentCreateRequest incidentCreateRequest) {
         User user = userUtil.getLoggedInUser();
 
+        //generation unique incident no per user
         String incidentNo=getUniqueIncidentNoPerUser(user);
 
         Incident incident =new Incident(
@@ -111,6 +112,8 @@ public class IncidentServiceImpl implements IncidentService{
     }
 
     private String getUniqueIncidentNoPerUser(User user){
+        //In live environment this is not the correct solution
+        //We could have used Reddis, or generate the longer incident no using uuid
         String incidentNo;
         do{
             incidentNo="RMG" + StringUtil.getRandomNumberString() + LocalDateTime.now().getYear();
